@@ -1,19 +1,29 @@
 import requests
+import time
 
 author_id = "V3Qc_HsAAAAJ"
 api_key = "d83574e9881757768965d462eec78a446bd242b633b1f73378539004988be08c"
 
-url = f"https://serpapi.com/search.json?engine=google_scholar_author&author_id={author_id}&api_key={api_key}"
+all_articles = []
+start = 0
+while True:
+    url = f"https://serpapi.com/search.json?engine=google_scholar_author&author_id={author_id}&api_key={api_key}&start={start}"
+    response = requests.get(url)
+    if response.status_code != 200:
+        print("Failed to get data:", response.status_code)
+        break
+    data = response.json()
+    articles = data.get("articles", [])
+    if not articles:
+        break
+    all_articles.extend(articles)
+    print(f"Got {len(articles)} articles, total {len(all_articles)}")
+    start += 10  # SerpAPI trả về 10 bài mỗi lần
+    time.sleep(2)  # Nghỉ 2 giây để tránh bị block hoặc quá tải
 
-response = requests.get(url)
-if response.status_code != 200:
-    print("Failed to get data:", response.status_code)
-    exit(1)
+print(f"Total articles fetched: {len(all_articles)}")
 
-data = response.json()
-
-articles = data.get("articles", [])
-
+# Tạo file HTML như trước, dùng all_articles
 html_parts = []
 html_parts.append("""
 <!DOCTYPE html>
@@ -34,10 +44,10 @@ html_parts.append("""
 <h1>Google Scholar Publications</h1>
 """)
 
-if not articles:
+if not all_articles:
     html_parts.append("<p>No publications found.</p>")
 else:
-    for pub in articles:
+    for pub in all_articles:
         title = pub.get("title", "No title")
         authors = pub.get("authors", "Unknown authors")
         publication = pub.get("publication", "Unknown publication")
