@@ -34,18 +34,19 @@ def generate_html(publications):
         doi = pub.get('doi', '').strip()
         pdf_link = pub.get('pdf_link', '').strip()
 
-        details = []
-        if journal:
-            details.append(f"<em>{journal}</em>")
+        meta_badges = []
         if year:
-            details.append(str(year))
+            meta_badges.append(f'<span class="badge bg-secondary">{year}</span>')
         if volume:
-            details.append(f"Vol. {volume}")
+            meta_badges.append(f'<span class="badge bg-info text-dark">Vol. {volume}</span>')
         if issue:
-            details.append(f"Issue {issue}")
+            meta_badges.append(f'<span class="badge bg-warning text-dark">Issue {issue}</span>')
         if pages:
-            details.append(f"pp. {pages}")
-        details_str = ', '.join(details)
+            meta_badges.append(f'<span class="badge bg-success">pp. {pages}</span>')
+        if journal:
+            journal_str = f'<em>{journal}</em>'
+        else:
+            journal_str = ""
 
         links = []
         if doi:
@@ -55,11 +56,14 @@ def generate_html(publications):
         links_str = ' | '.join(links)
 
         list_items += f"""
-        <li class="list-group-item mb-3">
-            <h5 class="mb-1">{idx}. {title}</h5>
+        <li class="list-group-item shadow-sm p-4 mb-3 bg-white rounded publication-item">
+            <div class="d-flex justify-content-between align-items-start">
+                <h5 class="fw-bold">{idx}. {title}</h5>
+                <div>{''.join(meta_badges)}</div>
+            </div>
             <p class="mb-1"><strong>Authors:</strong> {authors}</p>
-            <p class="mb-1 text-muted">{details_str}</p>
-            <p>{links_str}</p>
+            <p class="mb-1">{journal_str}</p>
+            <p class="text-muted small">{links_str}</p>
         </li>"""
 
     html = f"""<!DOCTYPE html>
@@ -71,10 +75,15 @@ def generate_html(publications):
     <style>
         body {{
             padding: 2rem;
-            background-color: #f9f9f9;
+            background-color: #f0f2f5;
         }}
         h2 {{
             margin-bottom: 2rem;
+            font-weight: bold;
+        }}
+        .publication-item:hover {{
+            background-color: #eef5ff;
+            transition: 0.3s;
         }}
     </style>
 </head>
@@ -88,6 +97,7 @@ def generate_html(publications):
 </body>
 </html>"""
     return html
+
 
 
 def save_html(html_content, filename="publications.html"):
