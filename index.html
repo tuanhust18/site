@@ -86,6 +86,7 @@
       </div>
     </section>
 
+
     <section>
       <h2 class="section-title">Blog</h2>
       <div id="blog-posts">
@@ -106,21 +107,36 @@
     <p>&copy; 2025 <span contenteditable="true">Dr. T.T. Nguyen</span>. All rights reserved.</p>
   </footer>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script>
-    // Google Scholar API via SerpAPI (replace YOUR_API_KEY and author_id)
-    fetch('https://serpapi.com/search.json?engine=google_scholar_author&author_id=V3Qc_HsAAAAJ&api_key=d83574e9881757768965d462eec78a446bd242b633b1f73378539004988be08c')
-      .then(response => response.json())
-      .then(data => {
-        const container = document.getElementById('publications');
-        container.innerHTML = '';
-        data.articles.slice(0, 5).forEach(pub => {
-          const div = document.createElement('div');
-          div.classList.add('mb-3');
-          div.innerHTML = `<strong>${pub.title}</strong><br><small>${pub.authors} – ${pub.publication}</small>`;
-          container.appendChild(div);
-        });
+<script>
+  fetch("https://serpapi.com/search.json?engine=google_scholar_author&author_id=V3Qc_HsAAAAJ&api_key=d83574e9881757768965d462eec78a446bd242b633b1f73378539004988be08c")
+    .then(response => response.json())
+    .then(data => {
+      const container = document.getElementById("publications");
+      container.innerHTML = "";
+
+      if (!data.articles || data.articles.length === 0) {
+        container.innerHTML = "<p>No publications found.</p>";
+        return;
+      }
+
+      data.articles.forEach(pub => {
+        const div = document.createElement("div");
+        div.classList.add("mb-3");
+        div.innerHTML = `
+          <strong>${pub.title}</strong><br>
+          <small>${pub.authors} – ${pub.publication} (${pub.year || ''})</small>
+        `;
+        container.appendChild(div);
       });
-  </script>
+    })
+    .catch(err => {
+      document.getElementById("publications").innerHTML = "<p>Error loading publications.</p>";
+      console.error(err);
+    });
+</script>
 </body>
 </html>
+
+
+
+

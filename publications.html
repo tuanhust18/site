@@ -1,55 +1,141 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Publications</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
-  <style>
-    body {
-      padding: 2rem;
-      font-family: "Segoe UI", sans-serif;
-    }
-    h1 {
-      margin-bottom: 2rem;
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Publications</title>
+<style>
+  body { font-family: Arial, sans-serif; padding: 20px; max-width: 800px; margin: auto; }
+  h1 { text-align: center; }
+  .pub { margin-bottom: 20px; padding: 10px; border: 1px solid #ddd; border-radius: 5px; }
+  .title { font-weight: bold; font-size: 1.1em; }
+  .details { font-size: 0.9em; color: #555; }
+</style>
 </head>
 <body>
-  <h1>Google Scholar Publications</h1>
-  <div id="publications">
-    <p>Loading publications from Google Scholar...</p>
-  </div>
+<h1>Google Scholar Publications</h1>
 
-  <script>
-    const authorId = "V3Qc_HsAAAAJ";
-    const apiKey = "d83574e9881757768965d462eec78a446bd242b633b1f73378539004988be08c";
 
-    fetch(`https://serpapi.com/search.json?engine=google_scholar_author&author_id=${authorId}&api_key=${apiKey}`)
-      .then(response => response.json())
-      .then(data => {
-        const container = document.getElementById("publications");
-        container.innerHTML = "";
+        <div class="pub">
+            <div class="title">Flexible solid‐state asymmetric supercapacitors based on nitrogen‐doped graphene encapsulated ternary metal‐nitrides with ultralong cycle life</div>
+            <div class="details">J Balamurugan, TT Nguyen, V Aravindan, NH Kim, JH Lee – Advanced Functional Materials 28 (44), 1804663, 2018 (2018)</div>
+        </div>
+        
 
-        if (!data.articles || data.articles.length === 0) {
-          container.innerHTML = "<p>No publications found.</p>";
-          return;
-        }
+        <div class="pub">
+            <div class="title">All ternary metal selenide nanostructures for high energy flexible charge storage devices</div>
+            <div class="details">J Balamurugan, TT Nguyen, V Aravindan, NH Kim, SH Lee, JH Lee – Nano Energy 65, 103999, 2019 (2019)</div>
+        </div>
+        
 
-        data.articles.forEach(pub => {
-          const div = document.createElement("div");
-          div.classList.add("mb-3", "p-2", "border", "rounded");
-          div.innerHTML = `
-            <strong>${pub.title}</strong><br>
-            <small>${pub.authors} – ${pub.publication} (${pub.year || ''})</small>
-          `;
-          container.appendChild(div);
-        });
-      })
-      .catch(err => {
-        document.getElementById("publications").innerHTML = "<p>Error loading publications.</p>";
-        console.error(err);
-      });
-  </script>
+        <div class="pub">
+            <div class="title">Uniformly Controlled Treble Boundary Using Enriched Adsorption Sites and Accelerated Catalyst Cathode for Robust Lithium–Sulfur Batteries</div>
+            <div class="details">R Chu, TT Nguyen, Y Bai, NH Kim, JH Lee – Advanced Energy Materials 12 (9), 2102805, 2022 (2022)</div>
+        </div>
+        
+
+        <div class="pub">
+            <div class="title">Boosting the Energy Density of Flexible Solid-State Supercapacitors via Both Ternary NiV2Se4 and NiFe2Se4 Nanosheet Arrays</div>
+            <div class="details">TT Nguyen, J Balamurugan, V Aravindan, NH Kim, JH Lee – Chemistry of Materials 31 (12), 4490-4504, 2019 (2019)</div>
+        </div>
+        
+
+        <div class="pub">
+            <div class="title">Unique heterointerface engineering of Ni2P− MnP nanosheets coupled Co2P nanoflowers as hierarchical dual-functional electrocatalyst for highly proficient overall water-splitting</div>
+            <div class="details">MR Kandel, UN Pan, PP Dhakal, RB Ghising, TT Nguyen, J Zhao, NH Kim, ... – Applied Catalysis B: Environmental 331, 122680, 2023 (2023)</div>
+        </div>
+        
+
+        <div class="pub">
+            <div class="title">Novel core-shell CuMo-oxynitride@ N-doped graphene nanohybrid as multifunctional catalysts for rechargeable zinc-air batteries and water splitting</div>
+            <div class="details">J Balamurugan, TT Nguyen, NH Kim, DH Kim, JH Lee – Nano Energy 85, 105987, 2021 (2021)</div>
+        </div>
+        
+
+        <div class="pub">
+            <div class="title">3D nickel molybdenum oxyselenide (Ni1-xMoxOSe) nanoarchitectures as advanced multifunctional catalyst for Zn-air batteries and water splitting</div>
+            <div class="details">J Balamurugan, TT Nguyen, DH Kim, NH Kim, JH Lee – Applied Catalysis B: Environmental 286, 119909, 2021 (2021)</div>
+        </div>
+        
+
+        <div class="pub">
+            <div class="title">Hierarchical 3D Zn–Ni–P nanosheet arrays as an advanced electrode for high-performance all-solid-state asymmetric supercapacitors</div>
+            <div class="details">TT Nguyen, J Balamurugan, NH Kim, JH Lee – Journal of Materials Chemistry A 6 (18), 8669-8681, 2018 (2018)</div>
+        </div>
+        
+
+        <div class="pub">
+            <div class="title">Facile synthesis of novel sulfonated polyaniline functionalized graphene using m-aminobenzene sulfonic acid for asymmetric supercapacitor application</div>
+            <div class="details">P Bandyopadhyay, T Kuila, J Balamurugan, TT Nguyen, NH Kim, JH Lee – Chemical Engineering Journal 308, 1174-1184, 2017 (2017)</div>
+        </div>
+        
+
+        <div class="pub">
+            <div class="title">Highly reversible water splitting cell building from hierarchical 3D nickel manganese oxyphosphide nanosheets</div>
+            <div class="details">J Balamurugan, TT Nguyen, V Aravindan, NH Kim, JH Lee – Nano Energy 69, 104432, 2019 (2019)</div>
+        </div>
+        
+
+        <div class="pub">
+            <div class="title">Fabrication of functionalized graphene oxide/maleic anhydride grafted polypropylene composite film with excellent gas barrier and anticorrosion properties</div>
+            <div class="details">X Li, P Bandyopadhyay, TT Nguyen, O Park, JH Lee – Journal of Membrane Science 547, 80-92, 2018 (2018)</div>
+        </div>
+        
+
+        <div class="pub">
+            <div class="title">Copper-Incorporated Heterostructures of Amorphous NiSex/Crystalline NiSe2 as an Efficient Electrocatalyst for Overall Water Splitting</div>
+            <div class="details">KR Park, DT Tran, TT Nguyen, NH Kim, JH Lee – Chemical Engineering Journal 422, 130048, 2021 (2021)</div>
+        </div>
+        
+
+        <div class="pub">
+            <div class="title">A hierarchical 2D Ni–Mo–S nanosheet@ nitrogen doped graphene hybrid as a Pt-free cathode for high-performance dye sensitized solar cells and fuel cells</div>
+            <div class="details">J Balamurugan, SG Peera, M Guo, TT Nguyen, NH Kim, JH Lee – Journal of Materials Chemistry A 5 (34), 17896-17908, 2017 (2017)</div>
+        </div>
+        
+
+        <div class="pub">
+            <div class="title">Hierarchical 3D Oxygenated Cobalt Vanadium Selenide Nanosheets as Advanced Electrode for Flexible Zinc–Cobalt and Zinc–Air Batteries</div>
+            <div class="details">TT Nguyen, J Balamurugan, DH Kim, NH Kim, JH Lee – Small 16 (48), 2004661, 2020 (2020)</div>
+        </div>
+        
+
+        <div class="pub">
+            <div class="title">Dual-functional Co5. 47N/Fe3N heterostructure interconnected 3D N-doped carbon nanotube-graphene hybrids for accelerating polysulfide conversion in Li-S batteries</div>
+            <div class="details">TT Nguyen, J Balamurugan, HW Go, QP Ngo, NH Kim, JH Lee – Chemical Engineering Journal 427, 131774, 2021 (2021)</div>
+        </div>
+        
+
+        <div class="pub">
+            <div class="title">Enhanced hydrogen gas barrier performance of diaminoalkane functionalized stitched graphene oxide/polyurethane composites</div>
+            <div class="details">P Bandyopadhyay, TT Nguyen, X Li, NH Kim, JH Lee – Composites Part B: Engineering 117, 101-110, 2017 (2017)</div>
+        </div>
+        
+
+        <div class="pub">
+            <div class="title">Enhanced electrocatalytic performance of an ultrafine AuPt nanoalloy framework embedded in graphene towards epinephrine sensing</div>
+            <div class="details">TD Thanh, J Balamurugan, TT Nguyen, H Jeong, SH Lee, NH Kim, ... – Biosensors and Bioelectronics 89, 750-757, 2017 (2017)</div>
+        </div>
+        
+
+        <div class="pub">
+            <div class="title">Effect of high molecular weight polyethyleneimine functionalized graphene oxide coated polyethylene terephthalate film on the hydrogen gas barrier properties</div>
+            <div class="details">WB Park, P Bandyopadhyay, TT Nguyen, T Kuila, NH Kim, JH Lee – Composites Part B: Engineering 106, 316-323, 2016 (2016)</div>
+        </div>
+        
+
+        <div class="pub">
+            <div class="title">Novel cobalt-doped molybdenum oxynitride quantum dot@ N-doped carbon nanosheets with abundant oxygen vacancies for long-life rechargeable zinc–air batteries</div>
+            <div class="details">TT Nguyen, J Balamurugan, KT Lau, NH Kim, JH Lee – Journal of Materials Chemistry A 9, 9092-9104, 2021 (2021)</div>
+        </div>
+        
+
+        <div class="pub">
+            <div class="title">Tunable construction of FexCo3-xSe4 nanostructures as advanced electrode for boosting capacity and energy density</div>
+            <div class="details">R Balaji, J Balamurugan, TT Nguyen, NH Kim, JH Lee – Chemical Engineering Journal 390, 124557, 2020 (2020)</div>
+        </div>
+        
+
 </body>
 </html>
