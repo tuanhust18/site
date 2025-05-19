@@ -1,72 +1,109 @@
-import requests
-import time
+import csv
 
-author_id = "V3Qc_HsAAAAJ"
-api_key = "d83574e9881757768965d462eec78a446bd242b633b1f73378539004988be08c"
+def load_publications(csv_path):
+    publications = []
+    with open(csv_path, newline='', encoding='utf-8') as csvfile:
+        reader = csv.DictReader(csvfile)
+        for row in reader:
+            title = row.get('title', '').strip()
+            if not title:
+                continue  # Bỏ qua nếu không có tiêu đề
+            try:
+                row['year'] = int(row.get('year', '').strip())
+            except:
+                row['year'] = None
+            publications.append(row)
+    return publications
 
-all_articles = []
-start = 0
-while True:
-    url = f"https://serpapi.com/search.json?engine=google_scholar_author&author_id={author_id}&api_key={api_key}&start={start}"
-    response = requests.get(url)
-    if response.status_code != 200:
-        print("Failed to get data:", response.status_code)
-        break
-    data = response.json()
-    articles = data.get("articles", [])
-    if not articles:
-        break
-    all_articles.extend(articles)
-    print(f"Got {len(articles)} articles, total {len(all_articles)}")
-    start += 10  # SerpAPI trả về 10 bài mỗi lần
-    time.sleep(2)  # Nghỉ 2 giây để tránh bị block hoặc quá tải
+def sort_publications(publications):
+    return sorted(publications, key=lambda x: x['year'] or 0, reverse=True)
 
-print(f"Total articles fetched: {len(all_articles)}")
+def generate_html(publications):
+    list_items = ""
+    for idx, pub in enumerate(publications, 1):
+        title = pub.get('title', '').strip()
+        authors = pub.get('authors', 'N/A').strip()
+        highlight_name = "Thanh Tuan Nguyen"
+        authors = authors.replace(highlight_name, f"<strong>{highlight_name}</strong>")
 
-# Tạo file HTML như trước, dùng all_articles
-html_parts = []
-html_parts.append("""
-<!DOCTYPE html>
+        journal = pub.get('journal', '').strip()
+        year = pub.get('year')
+        volume = pub.get('volume', '').strip()
+        issue = pub.get('issue', '').strip()
+        pages = pub.get('pages', '').strip()
+        doi = pub.get('doi', '').strip()
+        pdf_link = pub.get('pdf_link', '').strip()
+
+        details = []
+        if journal:
+            details.append(f"<em>{journal}</em>")
+        if year:
+            details.append(str(year))
+        if volume:
+            details.append(f"Vol. {volume}")
+        if issue:
+            details.append(f"Issue {issue}")
+        if pages:
+            details.append(f"pp. {pages}")
+        details_str = ', '.join(details)
+
+        links = []
+        if doi:
+            links.append(f'🔗 <a href="https://doi.org/{doi}" target="_blank">DOI</a>')
+        if pdf_link:
+            links.append(f'📄 <a href="{pdf_link}" target="_blank">PDF</a>')
+        links_str = ' | '.join(links)
+
+        list_items += f"""
+        <li class="list-group-item mb-3">
+            <h5 class="mb-1">{idx}. {title}</h5>
+            <p class="mb-1"><strong>Authors:</strong> {authors}</p>
+            <p class="mb-1 text-muted">{details_str}</p>
+            <p>{links_str}</p>
+        </li>"""
+
+    html = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Publications</title>
-<style>
-  body { font-family: Arial, sans-serif; padding: 20px; max-width: 800px; margin: auto; }
-  h1 { text-align: center; }
-  .pub { margin-bottom: 20px; padding: 10px; border: 1px solid #ddd; border-radius: 5px; }
-  .title { font-weight: bold; font-size: 1.1em; }
-  .details { font-size: 0.9em; color: #555; }
-</style>
+    <meta charset="UTF-8">
+    <title>Publications</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {{
+            padding: 2rem;
+            background-color: #f9f9f9;
+        }}
+        h2 {{
+            margin-bottom: 2rem;
+        }}
+        /* Highlight khi rê chuột */
+        .list-group-item:hover {{
+            background-color: #e6f0ff;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }}
+    </style>
 </head>
 <body>
-<h1>Google Scholar Publications</h1>
-""")
-
-if not all_articles:
-    html_parts.append("<p>No publications found.</p>")
-else:
-    for pub in all_articles:
-        title = pub.get("title", "No title")
-        authors = pub.get("authors", "Unknown authors")
-        publication = pub.get("publication", "Unknown publication")
-        year = pub.get("year", "")
-        html_parts.append(f"""
-        <div class="pub">
-            <div class="title">{title}</div>
-            <div class="details">{authors} – {publication} ({year})</div>
-        </div>
-        """)
-
-html_parts.append("""
+    <div class="container">
+        <h2>📚 Publications</h2>
+        <ul class="list-group list-group-flush">
+            {list_items}
+        </ul>
+    </div>
 </body>
-</html>
-""")
+</html>"""
+    return html
 
-html_content = "\n".join(html_parts)
 
-with open("publications.html", "w", encoding="utf-8") as f:
-    f.write(html_content)
+def save_html(html_content, filename="publications.html"):
+    with open(filename, "w", encoding="utf-8") as f:
+        f.write(html_content)
+    print(f"✅ HTML exported to {filename}")
 
-print("File publications.html đã được tạo thành công!")
+if __name__ == "__main__":
+    csv_file = r"C:\Users\ThanhTuanNguyen\Desktop\publications.csv"
+    publications = load_publications(csv_file)
+    publications_sorted = sort_publications(publications)
+    html_output = generate_html(publications_sorted)
+    save_html(html_output)
