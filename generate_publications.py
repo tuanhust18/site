@@ -102,7 +102,7 @@ def save_html(html_content, filename="publications.html"):
     print(f"✅ HTML exported to {filename}")
 
 if __name__ == "__main__":
-    csv_file = r"C:\Users\ThanhTuanNguyen\Desktop\publications.csv"
+    csv_file = r"C:\Users\ThanhTuanNguyen\Documents\GitHub\site\publications.csv"
     publications = load_publications(csv_file)
     publications_sorted = sort_publications(publications)
     html_output = generate_html(publications_sorted)
