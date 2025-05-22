@@ -6,15 +6,22 @@
     body {
       margin: 0;
       font-family: Roboto, sans-serif;
+      padding-top: 60px; /* Đẩy nội dung xuống dưới menu cố định */
     }
 
     nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
       background-color: #333;
       text-align: center;
+      z-index: 1000;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
     }
 
     ul.nav {
-      display: inline-block; /* Đưa toàn bộ menu vào giữa */
+      display: inline-block;
       padding: 0;
       margin: 0;
       list-style: none;
