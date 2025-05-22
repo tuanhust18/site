@@ -2,11 +2,14 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
     body {
       margin: 0;
       font-family: Roboto, sans-serif;
-      padding-top: 60px; /* Đẩy nội dung xuống dưới menu cố định */
+      padding-top: 60px;
     }
 
     nav {
@@ -15,9 +18,12 @@
       left: 0;
       width: 100%;
       background-color: #333;
-      text-align: center;
       z-index: 1000;
       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    }
+
+    .menu-container {
+      text-align: center;
     }
 
     ul.nav {
@@ -42,16 +48,60 @@
     ul.nav li a:hover {
       background-color: #555;
     }
+
+    /* Responsive menu button */
+    .menu-toggle {
+      display: none;
+      background-color: #333;
+      color: white;
+      padding: 14px 20px;
+      font-size: 20px;
+      cursor: pointer;
+      border: none;
+    }
+
+    @media screen and (max-width: 768px) {
+      .menu-toggle {
+        display: block;
+        width: 100%;
+        text-align: left;
+      }
+
+      .menu-container {
+        display: none;
+        text-align: left;
+      }
+
+      ul.nav {
+        display: block;
+      }
+
+      ul.nav li {
+        display: block;
+      }
+    }
   </style>
 </head>
 <body>
+  <!-- Menu toggle for mobile -->
+  <button class="menu-toggle" onclick="toggleMenu()"><i class="fas fa-bars"></i> Menu</button>
+
   <nav>
-    <ul class="nav">
-      <li><a href="#">Home</a></li>
-      <li><a href="#">Publications</a></li>
-      <li><a href="#">Research</a></li>
-      <li><a href="#">News</a></li>
-    </ul>
+    <div class="menu-container" id="menu">
+      <ul class="nav">
+        <li><a href="#home"><i class="fas fa-home"></i> Home</a></li>
+        <li><a href="#pub"><i class="fas fa-book"></i> Publications</a></li>
+        <li><a href="#research"><i class="fas fa-flask"></i> Research</a></li>
+        <li><a href="#news"><i class="fas fa-newspaper"></i> News</a></li>
+      </ul>
+    </div>
   </nav>
+
+  <script>
+    function toggleMenu() {
+      var menu = document.getElementById("menu");
+      menu.style.display = (menu.style.display === "block") ? "none" : "block";
+    }
+  </script>
 </body>
 </html>
