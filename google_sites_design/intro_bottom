@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Contact Info</title>
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <!-- Academicons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/academicons@1.9.1/css/academicons.min.css" />
+  <!-- Google Fonts: Roboto -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet" />
+
+  <style>
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: #1e2328;
+  color: white;
+  margin: 0;
+  padding: 0.5rem 0.5rem; /* rất nhỏ */
+  width: 100vw;
+  box-sizing: border-box;
+}
+.contact-info {
+  max-width: 100%;
+  margin: 0;
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+    .contact-row {
+      display: flex;
+      align-items: center;
+      margin: 0; /* margin-bottom sẽ do grid gap đảm nhận */
+      transition: background-color 0.3s ease, color 0.3s ease;
+      border-radius: 4px;
+    }
+    .contact-row:hover {
+      background-color: rgba(255 255 255 / 0.1);
+    }
+    .contact-row i {
+      min-width: 30px;
+      text-align: center;
+      font-size: 1.2em;
+      transition: color 0.3s ease;
+    }
+    .contact-row:hover i {
+      color: #66ccff;
+    }
+    .contact-row a,
+    .contact-row span {
+      margin-left: 12px;
+      color: white;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    .contact-row a:hover {
+      color: #66ccff;
+      text-decoration: underline;
+    }
+    .contact-name {
+      font-size: 24px;
+      font-weight: bold;
+      color: #4fc3f7; /* chữ màu xanh */
+    }
+
+    /* Responsive */
+    @media (max-width: 480px) {
+      body {
+        padding: 1rem;
+      }
+      .contact-info {
+        font-size: 16px;
+        max-width: 100%;
+
+        grid-template-columns: 1fr;
+        gap: 10px 0;
+      }
+      .contact-row {
+        flex-direction: row;
+        align-items: center;
+      }
+      .contact-row i {
+        min-width: 30px;
+        font-size: 1.4em;
+        margin-bottom: 0;
+      }
+      .contact-row a,
+      .contact-row span {
+        margin-left: 12px;
+      }
+      .contact-name {
+        font-size: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="contact-info">
+    <div class="contact-row">
+      <i class="fas fa-user"></i>
+      <span class="contact-name">Thanh Tuan Nguyen, PhD</span>
+    </div>
+    <div class="contact-row">
+      <i class="fas fa-envelope"></i>
+      <a href="mailto:nttuan@jbnu.ac.kr">nttuan@jbnu.ac.kr</a>
+    </div>
+    <div class="contact-row">
+      <i class="fas fa-phone"></i>
+      <a href="tel:+821058347311">+82 10 5834 7311</a>
+    </div>
+    <div class="contact-row">
+      <i class="fas fa-map-marker-alt"></i>
+      <span>Room 101, Creative Building No#2, Jeonbuk National University, 567 Baekje-daero, Deokjin-gu, Jeonju, Jeonbuk, South Korea.</span>
+    </div>
+    <div class="contact-row">
+      <i class="ai ai-google-scholar ai-fw"></i>
+      <a href="https://scholar.google.com/citations?user=V3Qc_HsAAAAJ&hl=en" target="_blank">Google Scholar Profile</a>
+    </div>
+    <div class="contact-row">
+      <i class="ai ai-orcid ai-fw"></i>
+      <a href="https://orcid.org/0000-0002-4014-6923" target="_blank">ORCID: 0000-0002-4014-6923</a>
+    </div>
+  </div>
+
+</body>
+</html>
