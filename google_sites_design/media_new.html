@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Điểm tin & Video</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    .section { margin-bottom: 40px; }
+    .item { margin-bottom: 10px; }
+    .title { font-weight: bold; }
+    .desc { font-size: 0.9em; color: #444; }
+    .pagination { margin-top: 10px; }
+    button { margin: 0 5px; }
+  </style>
+</head>
+<body>
+
+  <h2>Điểm Tin</h2>
+  <div id="news" class="section"></div>
+  <div id="news-pagination" class="pagination"></div>
+
+  <h2>Video YouTube</h2>
+  <div id="videos" class="section"></div>
+  <div id="video-pagination" class="pagination"></div>
+
+  <script>
+    const newsDataUrl = "https://docs.google.com/spreadsheets/d/1aZpTF94BMZ75oGmFZOPoJU7m5vgzoVRIZD2GVHLQA2k/gviz/tq?tqx=out:json&sheet=News";
+    const videoDataUrl = "https://docs.google.com/spreadsheets/d/1aZpTF94BMZ75oGmFZOPoJU7m5vgzoVRIZD2GVHLQA2k/gviz/tq?tqx=out:json&sheet=YouTube";
+
+    let news = [], videos = [];
+    let newsPage = 0, videoPage = 0, perPage = 3;
+
+    function fetchData(url, callback) {
+      fetch(url)
+        .then(res => res.text())
+        .then(text => {
+          const json = JSON.parse(text.substring(47).slice(0, -2));
+          const rows = json.table.rows.map(row => row.c.map(cell => cell ? cell.v : ""));
+          callback(rows);
+        });
+    }
+
+    function renderNews() {
+      const container = document.getElementById('news');
+      container.innerHTML = "";
+      const pageData = news.slice(newsPage * perPage, (newsPage + 1) * perPage);
+      pageData.forEach(([title, link, desc]) => {
+        container.innerHTML += `
+          <div class="item">
+            <div class="title"><a href="${link}" target="_blank">${title}</a></div>
+            <div class="desc">${desc}</div>
+          </div>`;
+      });
+      document.getElementById('news-pagination').innerHTML = `
+        <button onclick="newsPage=Math.max(0,newsPage-1);renderNews()">Prev</button>
+        <button onclick="newsPage++;renderNews()">Next</button>`;
+    }
+
+    function renderVideos() {
+      const container = document.getElementById('videos');
+      container.innerHTML = "";
+      const pageData = videos.slice(videoPage * perPage, (videoPage + 1) * perPage);
+      pageData.forEach(([title, videoId, desc]) => {
+        container.innerHTML += `
+          <div class="item">
+            <div class="title">${title}</div>
+            <iframe width="100%" height="215" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>
+            <div class="desc">${desc}</div>
+          </div>`;
+      });
+      document.getElementById('video-pagination').innerHTML = `
+        <button onclick="videoPage=Math.max(0,videoPage-1);renderVideos()">Prev</button>
+        <button onclick="videoPage++;renderVideos()">Next</button>`;
+    }
+
+    fetchData(newsDataUrl, data => { news = data; renderNews(); });
+    fetchData(videoDataUrl, data => { videos = data; renderVideos(); });
+  </script>
+</body>
+</html>
