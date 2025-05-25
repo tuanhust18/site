@@ -32,7 +32,7 @@
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      align-items: stretch; /* để các card có chiều cao bằng nhau trong hàng */
+      align-items: flex-start;
       gap: 20px;
       margin: 20px 0;
       width: 100%;
@@ -49,8 +49,8 @@
       transition: all 0.3s ease;
       display: flex;
       flex-direction: column;
-      align-items: flex-start; /* giữ căn trái nội dung */
-      flex: 1 1 300px; /* linh hoạt dàn đều chiều ngang, chiều cao tự kéo */
+      align-items: flex-start;
+      /* bỏ height cố định, JS sẽ xử lý */
     }
 
     .card:hover {
@@ -88,7 +88,7 @@
       height: 360px;
       border: none;
       border-radius: 8px;
-      flex-shrink: 0; /* không cho iframe co chiều cao */
+      flex-shrink: 0; /* không co chiều cao */
     }
 
     iframe.video {
@@ -96,7 +96,7 @@
       aspect-ratio: 16 / 9;
       border: none;
       border-radius: 8px;
-      flex-shrink: 0; /* giữ tỉ lệ video */
+      flex-shrink: 0;
     }
 
     .pagination {
@@ -188,6 +188,29 @@
       container.innerHTML = html;
     }
 
+    // Hàm cân bằng chiều cao các card trong container
+    function equalizeHeights(containerId) {
+      const container = document.getElementById(containerId);
+      if (!container) return;
+      const cards = container.querySelectorAll('.card');
+      let maxHeight = 0;
+
+      // reset trước để tính đúng
+      cards.forEach(card => {
+        card.style.height = 'auto';
+      });
+
+      // tìm chiều cao lớn nhất
+      cards.forEach(card => {
+        if(card.offsetHeight > maxHeight) maxHeight = card.offsetHeight;
+      });
+
+      // gán lại chiều cao cho đồng đều
+      cards.forEach(card => {
+        card.style.height = maxHeight + 'px';
+      });
+    }
+
     function renderPage(type, page) {
       pages[type] = page;
       const container = document.getElementById(type === 'news' ? 'news' : (type === 'video' ? 'videos' : 'certificates'));
@@ -214,6 +237,11 @@
       });
 
       renderPagination(type);
+
+      // Cân bằng chiều cao sau khi render xong
+      if (type === 'news') equalizeHeights('news');
+      else if (type === 'video') equalizeHeights('videos');
+      else if (type === 'cert') equalizeHeights('certificates');
     }
 
     fetchData(urls.news, 'news');
