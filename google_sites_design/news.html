@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Energy & Environmental News</title>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet" />
   <style>
     body {
       font-family: 'Roboto', sans-serif;
@@ -120,12 +120,12 @@
       margin-top: 20px;
       line-height: 1.6;
       color: #eee;
-      text-align: justify; /* Căn đều hai bên */
+      text-align: justify;
     }
     #detail-content img {
       display: block;
-      margin: 20px auto; /* Căn giữa ngang, và tạo khoảng cách trên dưới */
-      max-width: 100%;   /* Giúp ảnh co dãn phù hợp với chiều rộng container */
+      margin: 20px auto;
+      max-width: 100%;
       height: auto;
     }
     #close-btn {
@@ -166,29 +166,34 @@
 
   <script>
     const RSS_URL = "https://tuanhydrogen.blogspot.com/feeds/posts/default?alt=rss";
-    const API_URL = "https://api.rss2json.com/v1/api.json?rss_url=" + encodeURIComponent(RSS_URL);
-
     let allPosts = [];
     let filteredPosts = [];
     let currentTab = "All";
     let currentPage = 1;
     const pageSize = 6;
 
-    fetch(API_URL)
-      .then(res => res.json())
-      .then(data => {
-        allPosts = data.items.map(item => ({
-          title: item.title,
-          link: item.link,
-          date: new Date(item.pubDate).toLocaleDateString("vi-VN"),
-          summary: item.description.replace(/<[^>]*>?/gm, '').substring(0, 150) + "...",
-          content: item.content,
-          image: item.thumbnail || "",
-          categories: item.categories || []
-        }));
-        allPosts.reverse(); // Mới nhất trước
-        updateView();
-      });
+    function loadData() {
+      const API_URL = "https://api.rss2json.com/v1/api.json?rss_url=" + encodeURIComponent(RSS_URL) + "&_=" + new Date().getTime();
+
+      fetch(API_URL)
+        .then(res => res.json())
+        .then(data => {
+          allPosts = data.items.map(item => ({
+            title: item.title,
+            link: item.link,
+            date: new Date(item.pubDate).toLocaleDateString("vi-VN"),
+            summary: item.description.replace(/<[^>]*>?/gm, '').substring(0, 150) + "...",
+            content: item.content,
+            image: item.thumbnail || "",
+            categories: item.categories || []
+          }));
+          allPosts.reverse(); // Mới nhất trước
+          updateView();
+        })
+        .catch(err => {
+          console.error("Failed to load data", err);
+        });
+    }
 
     function renderTabs(categories) {
       const tabContainer = document.getElementById("tab-container");
@@ -249,15 +254,19 @@
     }
 
     function nextPage() {
-      currentPage++;
-      renderNews();
-      renderPagination();
+      if (currentPage * pageSize < filteredPosts.length) {
+        currentPage++;
+        renderNews();
+        renderPagination();
+      }
     }
 
     function prevPage() {
-      currentPage--;
-      renderNews();
-      renderPagination();
+      if (currentPage > 1) {
+        currentPage--;
+        renderNews();
+        renderPagination();
+      }
     }
 
     function showDetail(index) {
@@ -277,6 +286,12 @@
       allPosts.forEach(post => post.categories.forEach(c => catSet.add(c)));
       return Array.from(catSet).sort();
     }
+
+    // Load dữ liệu lần đầu
+    loadData();
+
+    // Tự động cập nhật dữ liệu mới mỗi 1 phút (60000 ms)
+    setInterval(loadData, 1000);
   </script>
 </body>
 </html>
