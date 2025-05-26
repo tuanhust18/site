@@ -224,9 +224,20 @@
         if (type === 'news') {
           const [title, link, desc] = row;
           html = `<div class="card"><div class="card-title"><a href="${link}" target="_blank">${title}</a></div><div class="desc">${desc}</div></div>`;
+
         } else if (type === 'video') {
           const [title, videoId, desc] = row;
-          html = `<div class="card"><iframe class="video" src="https://www.youtube.com/embed/${videoId}" allowfullscreen></iframe><div class="card-title">${title}</div><div class="desc">${desc}</div></div>`;
+          const thumbUrl = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
+          html = `
+           <div class="card">
+             <a href="https://www.youtube.com/watch?v=${videoId}" target="_blank">
+              <img src="${thumbUrl}" alt="${title}" class="video-thumb">
+            </a>
+           <div class="card-title">${title}</div>
+           <div class="desc">${desc}</div>
+          </div>`;
+        }
+          
         } else if (type === 'cert') {
           const [title, driveLink, desc] = row;
           const match = driveLink.match(/[-\w]{25,}/);
