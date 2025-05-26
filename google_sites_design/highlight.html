@@ -218,7 +218,7 @@
           const json = JSON.parse(text.substring(47).slice(0, -2));
           const rows = json.table.rows.map(row => row.c.map(cell => cell ? cell.v : ""));
           rows.shift();
-          data[type] = rows;
+          data[type] = rows.reverse();
           renderPage(type, 0);
         });
     }
