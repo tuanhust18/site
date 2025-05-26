@@ -51,7 +51,6 @@
       display: flex;
       flex-direction: column;
       align-items: flex-start;
-      /* bỏ height cố định, JS sẽ xử lý */
     }
 
     .card:hover {
@@ -89,15 +88,15 @@
       height: 360px;
       border: none;
       border-radius: 8px;
-      flex-shrink: 0; /* không co chiều cao */
+      flex-shrink: 0;
     }
 
-    iframe.video {
+    .video-thumb {
       width: 100%;
       aspect-ratio: 16 / 9;
-      border: none;
+      object-fit: cover;
       border-radius: 8px;
-      flex-shrink: 0;
+      cursor: pointer;
     }
 
     .pagination {
@@ -133,6 +132,43 @@
         height: 280px;
       }
     }
+
+    /* Modal video */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 999;
+      left: 0; top: 0;
+      width: 100%; height: 100%;
+      background-color: rgba(0,0,0,0.8);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      position: relative;
+      width: 90%;
+      max-width: 800px;
+      aspect-ratio: 16 / 9;
+      background: transparent;
+    }
+
+    .modal-content iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      border-radius: 10px;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: -30px;
+      right: 0;
+      color: #fff;
+      font-size: 30px;
+      font-weight: bold;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
@@ -153,6 +189,14 @@
     <h2>📜 Certificates</h2>
     <div id="certificates" class="grid"></div>
     <div id="cert-pagination" class="pagination"></div>
+  </div>
+
+  <!-- Modal for YouTube video -->
+  <div id="video-modal" class="modal" onclick="closeModal()">
+    <div class="modal-content" onclick="event.stopPropagation()">
+      <span class="modal-close" onclick="closeModal()">&times;</span>
+      <iframe id="modal-iframe" allowfullscreen></iframe>
+    </div>
   </div>
 
   <script>
@@ -189,27 +233,14 @@
       container.innerHTML = html;
     }
 
-    // Hàm cân bằng chiều cao các card trong container
     function equalizeHeights(containerId) {
       const container = document.getElementById(containerId);
       if (!container) return;
       const cards = container.querySelectorAll('.card');
       let maxHeight = 0;
-
-      // reset trước để tính đúng
-      cards.forEach(card => {
-        card.style.height = 'auto';
-      });
-
-      // tìm chiều cao lớn nhất
-      cards.forEach(card => {
-        if(card.offsetHeight > maxHeight) maxHeight = card.offsetHeight;
-      });
-
-      // gán lại chiều cao cho đồng đều
-      cards.forEach(card => {
-        card.style.height = maxHeight + 'px';
-      });
+      cards.forEach(card => card.style.height = 'auto');
+      cards.forEach(card => { if (card.offsetHeight > maxHeight) maxHeight = card.offsetHeight; });
+      cards.forEach(card => card.style.height = maxHeight + 'px');
     }
 
     function renderPage(type, page) {
@@ -224,20 +255,15 @@
         if (type === 'news') {
           const [title, link, desc] = row;
           html = `<div class="card"><div class="card-title"><a href="${link}" target="_blank">${title}</a></div><div class="desc">${desc}</div></div>`;
-
         } else if (type === 'video') {
           const [title, videoId, desc] = row;
-          const thumbUrl = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
           html = `
-           <div class="card">
-             <a href="https://www.youtube.com/watch?v=${videoId}" target="_blank">
-              <img src="${thumbUrl}" alt="${title}" class="video-thumb">
-            </a>
-           <div class="card-title">${title}</div>
-           <div class="desc">${desc}</div>
-          </div>`;
-        }
-          
+            <div class="card">
+              <img src="https://i.ytimg.com/vi/${videoId}/hqdefault.jpg" 
+                   alt="${title}" class="video-thumb" onclick="openModal('${videoId}')">
+              <div class="card-title">${title}</div>
+              <div class="desc">${desc}</div>
+            </div>`;
         } else if (type === 'cert') {
           const [title, driveLink, desc] = row;
           const match = driveLink.match(/[-\w]{25,}/);
@@ -249,11 +275,23 @@
       });
 
       renderPagination(type);
-
-      // Cân bằng chiều cao sau khi render xong
       if (type === 'news') equalizeHeights('news');
       else if (type === 'video') equalizeHeights('videos');
       else if (type === 'cert') equalizeHeights('certificates');
+    }
+
+    function openModal(videoId) {
+      const modal = document.getElementById("video-modal");
+      const iframe = document.getElementById("modal-iframe");
+      iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+      modal.style.display = "flex";
+    }
+
+    function closeModal() {
+      const modal = document.getElementById("video-modal");
+      const iframe = document.getElementById("modal-iframe");
+      iframe.src = "";
+      modal.style.display = "none";
     }
 
     fetchData(urls.news, 'news');
