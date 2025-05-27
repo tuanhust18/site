@@ -233,10 +233,30 @@ function fetchData(url, type) {
 function renderPagination(type) {
   const container = document.getElementById(`${type}-pagination`);
   const pageCount = Math.ceil(data[type].length / perPages[type]);
+  const currentPage = pages[type];
   let html = '';
-  for (let i = 0; i < pageCount; i++) {
-    html += `<button class="${i === pages[type] ? 'active' : ''}" onclick="renderPage('${type}', ${i})">${i + 1}</button>`;
+
+  if (pageCount <= 1) {
+    container.innerHTML = '';
+    return;
   }
+
+  // Prev button
+  html += `<button onclick="renderPage('${type}', ${Math.max(0, currentPage - 1)})">Prev</button>`;
+
+  let startPage = Math.max(0, currentPage - 4);
+  let endPage = Math.min(pageCount, startPage + 10);
+  if (endPage - startPage < 10) {
+    startPage = Math.max(0, endPage - 10);
+  }
+
+  for (let i = startPage; i < endPage; i++) {
+    html += `<button class="${i === currentPage ? 'active' : ''}" onclick="renderPage('${type}', ${i})">${i + 1}</button>`;
+  }
+
+  // Next button
+  html += `<button onclick="renderPage('${type}', ${Math.min(pageCount - 1, currentPage + 1)})">Next</button>`;
+
   container.innerHTML = html;
 }
 
