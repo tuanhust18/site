@@ -169,6 +169,14 @@
       font-weight: bold;
       cursor: pointer;
     }
+    .news-thumb {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-bottom: 10px;
+    }
+
   </style>
 </head>
 <body>
@@ -253,8 +261,13 @@
       pageData.forEach(row => {
         let html = '';
         if (type === 'news') {
-          const [title, link, desc] = row;
-          html = `<div class="card"><div class="card-title"><a href="${link}" target="_blank">${title}</a></div><div class="desc">${desc}</div></div>`;
+          const [title, link, desc, thumb] = row;
+          html = `
+            <div class="card">
+              <img src="${thumb}" alt="${title}" class="news-thumb">
+              <div class="card-title"><a href="${link}" target="_blank">${title}</a></div>
+              <div class="desc">${desc}</div>
+            </div>`;
         } else if (type === 'video') {
           const [title, videoId, desc] = row;
           html = `
