@@ -224,7 +224,6 @@ function fetchData(url, type) {
   .then(text => {
     const json = JSON.parse(text.substring(47).slice(0, -2));
     const rows = json.table.rows.map(row => row.c.map(cell => cell ? cell.v : ""));
-    rows.shift(); // bỏ header
     data[type] = rows.reverse();
     renderPage(type, 0);
   });
